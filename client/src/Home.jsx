@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
+import {useDebounce} from 'use-debounce';
 
 export default function Home() {
 
   const [requestLog, setRequestLog] = useState([])
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchParam] = useDebounce(searchQuery, 600);
+
+  useEffect(()=>{
+    setRequestLog((v) => [...v, searchParam])
+  }, [searchParam]);
 
   return (
     <main className="p-4 space-y-2 dark:bg-gray-500 flex flex-col items-center gap-1 min-h-screen">
@@ -21,7 +27,6 @@ export default function Home() {
         value={searchQuery}
         onChange={(e) => {
           setSearchQuery(e.target.value)
-          setRequestLog((v) => [...v, e.target.value])
         }}
       />
 
